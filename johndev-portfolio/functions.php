@@ -225,4 +225,86 @@ add_filter( 'nav_menu_link_attributes', 'john_portfolio_menu_classes', 10, 3 );
 
 // Set the branch that contains the stable release.
 // $myUpdateChecker->setBranch('main');
-?>
+
+
+// Customizer Settings
+function john_portfolio_customize_register( $wp_customize ) {
+    // Social Links Section
+    $wp_customize->add_section( 'john_portfolio_social_links', array(
+        'title'    => __( 'Social Links', 'johndev-portfolio' ),
+        'priority' => 30,
+    ) );
+
+    // GitHub URL
+    $wp_customize->add_setting( 'john_portfolio_github_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+
+    $wp_customize->add_control( 'john_portfolio_github_url', array(
+        'label'    => __( 'GitHub URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_social_links',
+        'type'     => 'url',
+    ) );
+
+    // LinkedIn URL
+    $wp_customize->add_setting( 'john_portfolio_linkedin_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+
+    $wp_customize->add_control( 'john_portfolio_linkedin_url', array(
+        'label'    => __( 'LinkedIn URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_social_links',
+        'type'     => 'url',
+    ) );
+
+    // Twitter URL
+    $wp_customize->add_setting( 'john_portfolio_twitter_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+
+    $wp_customize->add_control( 'john_portfolio_twitter_url', array(
+        'label'    => __( 'Twitter URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_social_links',
+        'type'     => 'url',
+    ) );
+
+    // Facebook URL
+    $wp_customize->add_setting( 'john_portfolio_facebook_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+
+    $wp_customize->add_control( 'john_portfolio_facebook_url', array(
+        'label'    => __( 'Facebook URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_social_links',
+        'type'     => 'url',
+    ) );
+
+    // Instagram URL
+    $wp_customize->add_setting( 'john_portfolio_instagram_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+
+    $wp_customize->add_control( 'john_portfolio_instagram_url', array(
+        'label'    => __( 'Instagram URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_social_links',
+        'type'     => 'url',
+    ) );
+
+    // YouTube URL
+    $wp_customize->add_setting( 'john_portfolio_youtube_url', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+
+    $wp_customize->add_control( 'john_portfolio_youtube_url', array(
+        'label'    => __( 'YouTube URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_social_links',
+        'type'     => 'url',
+    ) );
+}
+add_action( 'customize_register', 'john_portfolio_customize_register' );
