@@ -187,10 +187,59 @@
             </div>
         </section>
 
+        <section id="experience" class="section container">
+            <div class="section-header">
+                <span class="section-tag">04. Experience</span>
+                <h2>Work History</h2>
+            </div>
+            <div class="timeline-container">
+                <?php
+                $args = array(
+                    'post_type' => 'experience',
+                    'posts_per_page' => -1,
+                    'order' => 'DESC',
+                );
+                $experience_query = new WP_Query( $args );
+
+                if ( $experience_query->have_posts() ) :
+                    while ( $experience_query->have_posts() ) : $experience_query->the_post();
+                        $company = get_post_meta( get_the_ID(), '_experience_company', true );
+                        $job_title = get_post_meta( get_the_ID(), '_experience_job_title', true );
+                        $duration = get_post_meta( get_the_ID(), '_experience_duration', true );
+                        $location = get_post_meta( get_the_ID(), '_experience_location', true );
+                        ?>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h3><?php echo esc_html( $job_title ); ?></h3>
+                                    <span class="timeline-company"><?php echo esc_html( $company ); ?></span>
+                                </div>
+                                <div class="timeline-meta">
+                                    <span class="timeline-duration"><?php echo esc_html( $duration ); ?></span>
+                                    <?php if ( $location ) : ?>
+                                        <span class="timeline-location"> • <?php echo esc_html( $location ); ?></span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="timeline-description">
+                                    <?php the_content(); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                    echo '<p>No experience added yet.</p>';
+                endif;
+                ?>
+            </div>
+        </section>
+
         <?php if ( get_theme_mod( 'john_portfolio_show_blog', true ) ) : ?>
         <section id="blog" class="section container">
             <div class="section-header">
-                <span class="section-tag">04. Insights</span>
+                <span class="section-tag">05. Insights</span>
                 <h2><?php echo esc_html( get_theme_mod( 'john_portfolio_blog_title', 'Latest Articles' ) ); ?></h2>
             </div>
             <div class="blog-grid">
@@ -239,7 +288,7 @@
 
         <section id="contact" class="section container">
             <div class="section-header">
-                <span class="section-tag">05. Connect</span>
+                <span class="section-tag">06. Connect</span>
                 <h2>Get in Touch</h2>
             </div>
             <div class="contact-content">

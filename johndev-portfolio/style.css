@@ -4,7 +4,7 @@ Theme URI: https://example.com/johndev-portfolio
 Author: JohnDev
 Author URI: https://example.com
 Description: A minimalist, dark-themed portfolio for developers.
-Version: 1.3.3
+Version: 1.3.6
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: dark, minimalist, portfolio, developer
@@ -632,6 +632,339 @@ h2 {
 
 .footer-right a:hover {
     color: var(--accent-blue);
+}
+
+/* Single Post */
+.single-post-container {
+    padding-top: 120px;
+    max-width: 800px;
+}
+
+.single-article {
+    margin-bottom: 4rem;
+}
+
+.entry-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.entry-meta {
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.entry-title {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.entry-thumbnail {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.entry-thumbnail img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.entry-content {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+}
+
+.entry-content h2,
+.entry-content h3 {
+    color: var(--text-primary);
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.entry-content p {
+    margin-bottom: 1.5rem;
+}
+
+.entry-content blockquote {
+    border-left: 4px solid var(--accent-blue);
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-primary);
+}
+
+.entry-footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+/* 404 Page */
+.error-404-container {
+    padding-top: 120px;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.terminal-window {
+    background-color: #1a1a1d;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.terminal-header {
+    background-color: #2a2a30;
+    padding: 0.8rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+    margin-right: 1rem;
+}
+
+.btn-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.btn-dot.red {
+    background-color: #ff5f56;
+}
+
+.btn-dot.yellow {
+    background-color: #ffbd2e;
+}
+
+.btn-dot.green {
+    background-color: #27c93f;
+}
+
+.terminal-title {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.terminal-body {
+    padding: 3rem 2rem;
+    text-align: center;
+    font-family: var(--font-mono);
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+    animation: glitch 1s linear infinite;
+}
+
+.error-message p {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.error-actions {
+    margin-top: 2.5rem;
+}
+
+@keyframes glitch {
+
+    2%,
+    64% {
+        transform: translate(2px, 0) skew(0deg);
+    }
+
+    4%,
+    60% {
+        transform: translate(-2px, 0) skew(0deg);
+    }
+
+    62% {
+        transform: translate(0, 0) skew(5deg);
+    }
+}
+
+/* Archive & Search */
+.archive-container,
+.search-container {
+    padding-top: 120px;
+    min-height: 80vh;
+}
+
+.archive-header,
+.search-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.archive-title,
+.search-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.search-title span {
+    color: var(--accent-blue);
+}
+
+.archive-description {
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pagination {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.pagination .page-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-numbers.current,
+.pagination .page-numbers:hover {
+    background-color: var(--accent-blue);
+    color: #fff;
+    border-color: var(--accent-blue);
+}
+
+.pagination .next,
+.pagination .prev {
+    width: auto;
+    padding: 0 1rem;
+}
+
+/* Timeline (Work Experience) */
+.timeline-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+}
+
+.timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--border-color);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 3rem;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 11px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--bg-dark);
+    border: 2px solid var(--accent-blue);
+    border-radius: 50%;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-dot {
+    background-color: var(--accent-blue);
+    box-shadow: 0 0 10px var(--accent-blue-dim);
+}
+
+.timeline-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-content {
+    border-color: var(--accent-blue);
+    transform: translateX(5px);
+}
+
+.timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.timeline-header h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+    color: var(--text-primary);
+}
+
+.timeline-company {
+    font-size: 1rem;
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+.timeline-meta {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.timeline-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.timeline-description p:last-child {
+    margin-bottom: 0;
 }
 
 /* Responsive */

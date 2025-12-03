@@ -285,6 +285,111 @@ function john_portfolio_save_skill_level( $post_id ) {
 }
 add_action( 'save_post', 'john_portfolio_save_skill_level' );
 
+// Register Experience Custom Post Type
+function john_portfolio_register_experience_cpt() {
+    $labels = array(
+        'name'                  => _x( 'Experience', 'Post Type General Name', 'johndev-portfolio' ),
+        'singular_name'         => _x( 'Experience', 'Post Type Singular Name', 'johndev-portfolio' ),
+        'menu_name'             => __( 'Experience', 'johndev-portfolio' ),
+        'all_items'             => __( 'All Experience', 'johndev-portfolio' ),
+        'add_new_item'          => __( 'Add New Experience', 'johndev-portfolio' ),
+        'add_new'               => __( 'Add New', 'johndev-portfolio' ),
+        'new_item'              => __( 'New Experience', 'johndev-portfolio' ),
+        'edit_item'             => __( 'Edit Experience', 'johndev-portfolio' ),
+        'update_item'           => __( 'Update Experience', 'johndev-portfolio' ),
+        'view_item'             => __( 'View Experience', 'johndev-portfolio' ),
+        'search_items'          => __( 'Search Experience', 'johndev-portfolio' ),
+        'not_found'             => __( 'Not found', 'johndev-portfolio' ),
+        'not_found_in_trash'    => __( 'Not found in Trash', 'johndev-portfolio' ),
+        'featured_image'        => __( 'Company Logo', 'johndev-portfolio' ),
+        'set_featured_image'    => __( 'Set company logo', 'johndev-portfolio' ),
+        'remove_featured_image' => __( 'Remove company logo', 'johndev-portfolio' ),
+        'use_featured_image'    => __( 'Use as company logo', 'johndev-portfolio' ),
+    );
+    $args = array(
+        'label'                 => __( 'Experience', 'johndev-portfolio' ),
+        'description'           => __( 'Work Experience', 'johndev-portfolio' ),
+        'labels'                => $labels,
+        'supports'              => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 6,
+        'menu_icon'             => 'dashicons-businessperson',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => false,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+    );
+    register_post_type( 'experience', $args );
+}
+add_action( 'init', 'john_portfolio_register_experience_cpt', 0 );
+
+// Add Meta Boxes for Experience
+function john_portfolio_add_experience_meta_boxes() {
+    add_meta_box( 'john_portfolio_experience_details', __( 'Job Details', 'johndev-portfolio' ), 'john_portfolio_experience_details_callback', 'experience', 'normal', 'high' );
+}
+add_action( 'add_meta_boxes', 'john_portfolio_add_experience_meta_boxes' );
+
+function john_portfolio_experience_details_callback( $post ) {
+    wp_nonce_field( 'john_portfolio_save_experience_details', 'john_portfolio_experience_details_nonce' );
+    $company = get_post_meta( $post->ID, '_experience_company', true );
+    $job_title = get_post_meta( $post->ID, '_experience_job_title', true );
+    $duration = get_post_meta( $post->ID, '_experience_duration', true );
+    $location = get_post_meta( $post->ID, '_experience_location', true );
+    ?>
+    <p>
+        <label for="john_portfolio_experience_company"><?php _e( 'Company Name', 'johndev-portfolio' ); ?></label><br>
+        <input type="text" name="john_portfolio_experience_company" id="john_portfolio_experience_company" value="<?php echo esc_attr( $company ); ?>" class="widefat">
+    </p>
+    <p>
+        <label for="john_portfolio_experience_job_title"><?php _e( 'Job Title', 'johndev-portfolio' ); ?></label><br>
+        <input type="text" name="john_portfolio_experience_job_title" id="john_portfolio_experience_job_title" value="<?php echo esc_attr( $job_title ); ?>" class="widefat">
+    </p>
+    <p>
+        <label for="john_portfolio_experience_duration"><?php _e( 'Duration (e.g., Jan 2023 - Present)', 'johndev-portfolio' ); ?></label><br>
+        <input type="text" name="john_portfolio_experience_duration" id="john_portfolio_experience_duration" value="<?php echo esc_attr( $duration ); ?>" class="widefat">
+    </p>
+    <p>
+        <label for="john_portfolio_experience_location"><?php _e( 'Location (Optional)', 'johndev-portfolio' ); ?></label><br>
+        <input type="text" name="john_portfolio_experience_location" id="john_portfolio_experience_location" value="<?php echo esc_attr( $location ); ?>" class="widefat">
+    </p>
+    <?php
+}
+
+function john_portfolio_save_experience_details( $post_id ) {
+    if ( ! isset( $_POST['john_portfolio_experience_details_nonce'] ) ) {
+        return;
+    }
+    if ( ! wp_verify_nonce( $_POST['john_portfolio_experience_details_nonce'], 'john_portfolio_save_experience_details' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+
+    if ( isset( $_POST['john_portfolio_experience_company'] ) ) {
+        update_post_meta( $post_id, '_experience_company', sanitize_text_field( $_POST['john_portfolio_experience_company'] ) );
+    }
+    if ( isset( $_POST['john_portfolio_experience_job_title'] ) ) {
+        update_post_meta( $post_id, '_experience_job_title', sanitize_text_field( $_POST['john_portfolio_experience_job_title'] ) );
+    }
+    if ( isset( $_POST['john_portfolio_experience_duration'] ) ) {
+        update_post_meta( $post_id, '_experience_duration', sanitize_text_field( $_POST['john_portfolio_experience_duration'] ) );
+    }
+    if ( isset( $_POST['john_portfolio_experience_location'] ) ) {
+        update_post_meta( $post_id, '_experience_location', sanitize_text_field( $_POST['john_portfolio_experience_location'] ) );
+    }
+}
+add_action( 'save_post', 'john_portfolio_save_experience_details' );
+
 // Auto-add button class to Contact menu item
 function john_portfolio_menu_classes( $atts, $item, $args ) {
     if ( 'primary' === $args->theme_location ) {
