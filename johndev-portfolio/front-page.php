@@ -4,34 +4,84 @@
         <section id="hero" class="hero-section container">
             <div class="hero-content">
                 <div class="code-badge">
-                    <span class="comment">// Welcome to my digital fortress</span>
+                    <span class="comment"><?php echo esc_html( get_theme_mod( 'john_portfolio_code_comment', '// Welcome to my digital fortress' ) ); ?></span>
                 </div>
-                <h1>Building Secure <br> <span class="text-highlight">Digital Experiences</span></h1>
-                <p class="hero-subtitle">Full Stack Developer & Cybersecurity Specialist. I craft robust applications with a security-first mindset.</p>
+                <h1><?php echo esc_html( get_theme_mod( 'john_portfolio_hero_title', 'Building Secure' ) ); ?> <br> <span class="text-highlight"><?php echo esc_html( get_theme_mod( 'john_portfolio_hero_highlight', 'Digital Experiences' ) ); ?></span></h1>
+                <p class="hero-subtitle"><?php echo esc_html( get_theme_mod( 'john_portfolio_hero_subtitle', 'Full Stack Developer & Cybersecurity Specialist. I craft robust applications with a security-first mindset.' ) ); ?></p>
                 <div class="hero-cta">
-                    <a href="#projects" class="btn btn-primary">View Work</a>
+                    <a href="<?php echo esc_url( get_theme_mod( 'john_portfolio_hero_cta_url', '#projects' ) ); ?>" class="btn btn-primary"><?php echo esc_html( get_theme_mod( 'john_portfolio_hero_cta_text', 'View Work' ) ); ?></a>
                     <a href="#contact" class="btn btn-outline">Get in Touch</a>
                 </div>
             </div>
             <div class="hero-visual">
                 <div class="code-block-decoration">
 <pre><code><span class="keyword">const</span> <span class="variable">profile</span> = {
-  <span class="property">name</span>: <span class="string">'John'</span>,
-  <span class="property">role</span>: <span class="string">'Security Engineer'</span>,
+  <span class="property">name</span>: <span class="string">'<?php echo esc_html( get_theme_mod( 'john_portfolio_code_name', 'John' ) ); ?>'</span>,
+  <span class="property">role</span>: <span class="string">'<?php echo esc_html( get_theme_mod( 'john_portfolio_code_role', 'Security Engineer' ) ); ?>'</span>,
   <span class="property">skills</span>: [
-    <span class="string">'Penetration Testing'</span>,
-    <span class="string">'Secure Coding'</span>,
-    <span class="string">'React/Next.js'</span>
+<?php
+    $skills = get_theme_mod( 'john_portfolio_code_skills', 'Penetration Testing, Secure Coding, React/Next.js' );
+    $skills_array = explode( ',', $skills );
+    $last_key = array_key_last($skills_array);
+    foreach ( $skills_array as $key => $skill ) {
+        $comma = ( $key !== $last_key ) ? ',' : '';
+        echo '    <span class="string">\'' . esc_html( trim( $skill ) ) . '\'</span>' . $comma . "\n";
+    }
+?>
   ],
   <span class="property">status</span>: <span class="string">'Online'</span>
 };</code></pre>
                 </div>
             </div>
         </section>
+        
+        <section id="skills" class="section container">
+            <div class="section-header">
+                <span class="section-tag">01. Expertise</span>
+                <h2>Technical Skills</h2>
+            </div>
+            <div class="skills-grid">
+                <?php
+                $args = array(
+                    'post_type' => 'skill',
+                    'posts_per_page' => -1,
+                    'orderby' => 'title',
+                    'order' => 'ASC',
+                );
+                $skills_query = new WP_Query( $args );
+
+                if ( $skills_query->have_posts() ) :
+                    while ( $skills_query->have_posts() ) : $skills_query->the_post();
+                        $skill_level = get_post_meta( get_the_ID(), '_skill_level', true );
+                        ?>
+                        <div class="skill-card">
+                            <div class="skill-icon">
+                                <?php if ( has_post_thumbnail() ) : ?>
+                                    <?php the_post_thumbnail( 'thumbnail' ); ?>
+                                <?php else : ?>
+                                    <span class="dashicons dashicons-hammer" style="font-size: 40px; width: 40px; height: 40px; color: var(--accent-blue);"></span>
+                                <?php endif; ?>
+                            </div>
+                            <h3><?php the_title(); ?></h3>
+                            <?php if ( $skill_level ) : ?>
+                                <div class="skill-progress-container">
+                                    <div class="skill-progress-bar" style="width: <?php echo esc_attr( $skill_level ); ?>%;"></div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                    echo '<p>No skills found. Add some in the WordPress Admin!</p>';
+                endif;
+                ?>
+            </div>
+        </section>
 
         <section id="projects" class="section container">
             <div class="section-header">
-                <span class="section-tag">01. Portfolio</span>
+                <span class="section-tag">02. Portfolio</span>
                 <h2>Featured Projects</h2>
             </div>
             <div class="projects-grid">
@@ -90,7 +140,7 @@
 
         <section id="courses" class="section container">
             <div class="section-header">
-                <span class="section-tag">02. Knowledge</span>
+                <span class="section-tag">03. Knowledge</span>
                 <h2>Courses & Certifications</h2>
             </div>
             <div class="courses-list">
@@ -136,15 +186,65 @@
                 ?>
             </div>
         </section>
+
+        <?php if ( get_theme_mod( 'john_portfolio_show_blog', true ) ) : ?>
+        <section id="blog" class="section container">
+            <div class="section-header">
+                <span class="section-tag">04. Insights</span>
+                <h2><?php echo esc_html( get_theme_mod( 'john_portfolio_blog_title', 'Latest Articles' ) ); ?></h2>
+            </div>
+            <div class="blog-grid">
+                <?php
+                $args = array(
+                    'post_type' => 'post',
+                    'posts_per_page' => 3,
+                    'ignore_sticky_posts' => 1,
+                );
+                $blog_query = new WP_Query( $args );
+
+                if ( $blog_query->have_posts() ) :
+                    while ( $blog_query->have_posts() ) : $blog_query->the_post();
+                        ?>
+                        <article class="blog-card">
+                            <div class="blog-image">
+                                <?php if ( has_post_thumbnail() ) : ?>
+                                    <a href="<?php the_permalink(); ?>">
+                                        <?php the_post_thumbnail( 'medium_large', array( 'style' => 'width:100%;height:100%;object-fit:cover;' ) ); ?>
+                                    </a>
+                                <?php else : ?>
+                                    <a href="<?php the_permalink(); ?>" class="placeholder-overlay"></a>
+                                <?php endif; ?>
+                            </div>
+                            <div class="blog-content">
+                                <div class="blog-meta">
+                                    <span class="blog-date"><?php echo get_the_date(); ?></span>
+                                </div>
+                                <h3><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+                                <div class="blog-excerpt">
+                                    <?php the_excerpt(); ?>
+                                </div>
+                                <a href="<?php the_permalink(); ?>" class="btn-text">Read Article &rarr;</a>
+                            </div>
+                        </article>
+                        <?php
+                    endwhile;
+                    wp_reset_postdata();
+                else :
+                    echo '<p>No articles found.</p>';
+                endif;
+                ?>
+            </div>
+        </section>
+        <?php endif; ?>
+
         <section id="contact" class="section container">
             <div class="section-header">
-                <span class="section-tag">03. Connect</span>
+                <span class="section-tag">05. Connect</span>
                 <h2>Get in Touch</h2>
             </div>
             <div class="contact-content">
                 <p class="contact-text">
-                    I'm currently open to new opportunities and collaborations. 
-                    Whether you have a question or just want to say hi, I'll try my best to get back to you!
+                    <?php echo nl2br( esc_html( get_theme_mod( 'john_portfolio_contact_text', "I'm currently open to new opportunities and collaborations. Whether you have a question or just want to say hi, I'll try my best to get back to you!" ) ) ); ?>
                 </p>
                 <form id="contact-form" class="contact-form">
                     <div class="form-group">

@@ -201,6 +201,90 @@ function john_portfolio_register_course_cpt() {
 }
 add_action( 'init', 'john_portfolio_register_course_cpt', 0 );
 
+// Register Skill Custom Post Type
+function john_portfolio_register_skill_cpt() {
+    $labels = array(
+        'name'                  => _x( 'Skills', 'Post Type General Name', 'johndev-portfolio' ),
+        'singular_name'         => _x( 'Skill', 'Post Type Singular Name', 'johndev-portfolio' ),
+        'menu_name'             => __( 'Skills', 'johndev-portfolio' ),
+        'all_items'             => __( 'All Skills', 'johndev-portfolio' ),
+        'add_new_item'          => __( 'Add New Skill', 'johndev-portfolio' ),
+        'add_new'               => __( 'Add New', 'johndev-portfolio' ),
+        'new_item'              => __( 'New Skill', 'johndev-portfolio' ),
+        'edit_item'             => __( 'Edit Skill', 'johndev-portfolio' ),
+        'update_item'           => __( 'Update Skill', 'johndev-portfolio' ),
+        'view_item'             => __( 'View Skill', 'johndev-portfolio' ),
+        'search_items'          => __( 'Search Skill', 'johndev-portfolio' ),
+        'not_found'             => __( 'Not found', 'johndev-portfolio' ),
+        'not_found_in_trash'    => __( 'Not found in Trash', 'johndev-portfolio' ),
+        'featured_image'        => __( 'Skill Icon/Logo', 'johndev-portfolio' ),
+        'set_featured_image'    => __( 'Set skill icon', 'johndev-portfolio' ),
+        'remove_featured_image' => __( 'Remove skill icon', 'johndev-portfolio' ),
+        'use_featured_image'    => __( 'Use as skill icon', 'johndev-portfolio' ),
+    );
+    $args = array(
+        'label'                 => __( 'Skill', 'johndev-portfolio' ),
+        'description'           => __( 'Technical Skills', 'johndev-portfolio' ),
+        'labels'                => $labels,
+        'supports'              => array( 'title', 'thumbnail', 'custom-fields' ),
+        'hierarchical'          => false,
+        'public'                => true,
+        'show_ui'               => true,
+        'show_in_menu'          => true,
+        'menu_position'         => 7,
+        'menu_icon'             => 'dashicons-hammer',
+        'show_in_admin_bar'     => true,
+        'show_in_nav_menus'     => true,
+        'can_export'            => true,
+        'has_archive'           => false,
+        'exclude_from_search'   => false,
+        'publicly_queryable'    => true,
+        'capability_type'       => 'post',
+    );
+    register_post_type( 'skill', $args );
+}
+add_action( 'init', 'john_portfolio_register_skill_cpt', 0 );
+
+// Add Meta Box for Skill Level
+function john_portfolio_add_skill_meta_box() {
+    add_meta_box(
+        'john_portfolio_skill_level',
+        __( 'Skill Level (0-100)', 'johndev-portfolio' ),
+        'john_portfolio_skill_level_callback',
+        'skill',
+        'side'
+    );
+}
+add_action( 'add_meta_boxes', 'john_portfolio_add_skill_meta_box' );
+
+function john_portfolio_skill_level_callback( $post ) {
+    wp_nonce_field( 'john_portfolio_save_skill_level', 'john_portfolio_skill_level_nonce' );
+    $value = get_post_meta( $post->ID, '_skill_level', true );
+    echo '<input type="number" id="john_portfolio_skill_level_field" name="john_portfolio_skill_level_field" value="' . esc_attr( $value ) . '" min="0" max="100" style="width:100%;" />';
+    echo '<p class="description">' . __( 'Enter a percentage (e.g., 90). Leave blank to hide progress bar.', 'johndev-portfolio' ) . '</p>';
+}
+
+function john_portfolio_save_skill_level( $post_id ) {
+    if ( ! isset( $_POST['john_portfolio_skill_level_nonce'] ) ) {
+        return;
+    }
+    if ( ! wp_verify_nonce( $_POST['john_portfolio_skill_level_nonce'], 'john_portfolio_save_skill_level' ) ) {
+        return;
+    }
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+    if ( ! current_user_can( 'edit_post', $post_id ) ) {
+        return;
+    }
+    if ( ! isset( $_POST['john_portfolio_skill_level_field'] ) ) {
+        return;
+    }
+    $my_data = sanitize_text_field( $_POST['john_portfolio_skill_level_field'] );
+    update_post_meta( $post_id, '_skill_level', $my_data );
+}
+add_action( 'save_post', 'john_portfolio_save_skill_level' );
+
 // Auto-add button class to Contact menu item
 function john_portfolio_menu_classes( $atts, $item, $args ) {
     if ( 'primary' === $args->theme_location ) {
@@ -305,6 +389,150 @@ function john_portfolio_customize_register( $wp_customize ) {
         'label'    => __( 'YouTube URL', 'johndev-portfolio' ),
         'section'  => 'john_portfolio_social_links',
         'type'     => 'url',
+    ) );
+
+    // Hero Section
+    $wp_customize->add_section( 'john_portfolio_hero', array(
+        'title'    => __( 'Hero Section', 'johndev-portfolio' ),
+        'priority' => 20,
+    ) );
+
+    // Hero Title
+    $wp_customize->add_setting( 'john_portfolio_hero_title', array(
+        'default'           => 'Building Secure',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_hero_title', array(
+        'label'    => __( 'Hero Title (Line 1)', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    // Hero Highlight
+    $wp_customize->add_setting( 'john_portfolio_hero_highlight', array(
+        'default'           => 'Digital Experiences',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_hero_highlight', array(
+        'label'    => __( 'Highlighted Text (Line 2)', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    // Hero Subtitle
+    $wp_customize->add_setting( 'john_portfolio_hero_subtitle', array(
+        'default'           => 'Full Stack Developer & Cybersecurity Specialist. I craft robust applications with a security-first mindset.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_hero_subtitle', array(
+        'label'    => __( 'Subtitle', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'textarea',
+    ) );
+
+    // Hero CTA Text
+    $wp_customize->add_setting( 'john_portfolio_hero_cta_text', array(
+        'default'           => 'View Work',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_hero_cta_text', array(
+        'label'    => __( 'CTA Button Text', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    // Hero CTA URL
+    $wp_customize->add_setting( 'john_portfolio_hero_cta_url', array(
+        'default'           => '#projects',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_hero_cta_url', array(
+        'label'    => __( 'CTA Button URL', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    // Code Snippet Settings
+    $wp_customize->add_setting( 'john_portfolio_code_comment', array(
+        'default'           => '// Welcome to my digital fortress',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_code_comment', array(
+        'label'    => __( 'Code Comment', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'john_portfolio_code_name', array(
+        'default'           => 'John',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_code_name', array(
+        'label'    => __( 'Code Name', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'john_portfolio_code_role', array(
+        'default'           => 'Security Engineer',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_code_role', array(
+        'label'    => __( 'Code Role', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'john_portfolio_code_skills', array(
+        'default'           => 'Penetration Testing, Secure Coding, React/Next.js',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_code_skills', array(
+        'label'    => __( 'Code Skills (Comma Separated)', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_hero',
+        'type'     => 'textarea',
+    ) );
+
+    // Contact Section
+    $wp_customize->add_section( 'john_portfolio_contact', array(
+        'title'    => __( 'Contact Section', 'johndev-portfolio' ),
+        'priority' => 80,
+    ) );
+
+    $wp_customize->add_setting( 'john_portfolio_contact_text', array(
+        'default'           => "I'm currently open to new opportunities and collaborations. Whether you have a question or just want to say hi, I'll try my best to get back to you!",
+        'sanitize_callback' => 'sanitize_textarea_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_contact_text', array(
+        'label'    => __( 'Contact Text', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_contact',
+        'type'     => 'textarea',
+    ) );
+
+    // Blog Section
+    $wp_customize->add_section( 'john_portfolio_blog', array(
+        'title'    => __( 'Blog Section', 'johndev-portfolio' ),
+        'priority' => 70,
+    ) );
+
+    $wp_customize->add_setting( 'john_portfolio_show_blog', array(
+        'default'           => true,
+        'sanitize_callback' => 'wp_validate_boolean',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_show_blog', array(
+        'label'    => __( 'Show Blog Section', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_blog',
+        'type'     => 'checkbox',
+    ) );
+
+    $wp_customize->add_setting( 'john_portfolio_blog_title', array(
+        'default'           => 'Latest Articles',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'john_portfolio_blog_title', array(
+        'label'    => __( 'Section Title', 'johndev-portfolio' ),
+        'section'  => 'john_portfolio_blog',
+        'type'     => 'text',
     ) );
 }
 add_action( 'customize_register', 'john_portfolio_customize_register' );

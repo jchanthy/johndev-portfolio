@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Smooth scrolling for navigation links
+    // Note: CSS scroll-behavior: smooth is preferred, but this provides a fallback/control
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 targetElement.scrollIntoView({
@@ -69,35 +72,32 @@ document.addEventListener('DOMContentLoaded', () => {
             codeBlock.style.setProperty('--y', `${y}px`);
         });
     }
-    codeBlock.style.setProperty('--y', `${y}px`);
-});
-    }
 
-// Scroll Spy
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-links a');
+    // Scroll Spy
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-links a');
 
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.3 // Trigger when 30% of section is visible
-};
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.3 // Trigger when 30% of section is visible
+    };
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const id = entry.target.getAttribute('id');
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${id}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        observer.observe(section);
     });
-}, observerOptions);
-
-sections.forEach(section => {
-    observer.observe(section);
-});
 });
