@@ -4,7 +4,7 @@ Theme URI: https://example.com/johndev-portfolio
 Author: JohnDev
 Author URI: https://example.com
 Description: A minimalist, dark-themed portfolio for developers.
-Version: 1.3.6
+Version: 1.3.8
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: dark, minimalist, portfolio, developer
@@ -965,6 +965,268 @@ h2 {
 
 .timeline-description p:last-child {
     margin-bottom: 0;
+}
+
+/* Page Template */
+.page-container {
+    padding-top: 120px;
+    max-width: 800px;
+}
+
+.page-article {
+    margin-bottom: 4rem;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.5rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-form label {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.search-prompt {
+    color: var(--accent-blue);
+    font-family: var(--font-mono);
+    margin-right: 0.5rem;
+    font-weight: 700;
+}
+
+.search-field {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 1rem;
+}
+
+.search-field:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.search-submit {
+    background-color: var(--bg-dark);
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    padding: 0.4rem 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 4px;
+}
+
+.search-submit:hover {
+    background-color: var(--accent-blue);
+    color: #fff;
+}
+
+/* Post Navigation */
+.post-navigation {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.nav-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.nav-previous,
+.nav-next {
+    width: 100%;
+}
+
+.nav-previous a,
+.nav-next a {
+    display: block;
+    padding: 1.5rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.nav-previous a:hover,
+.nav-next a:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Comments */
+.comments-area {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.comments-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-family: var(--font-mono);
+    color: var(--accent-blue);
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 3rem;
+}
+
+.comment-body {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.comment-author {
+    font-weight: 600;
+    margin-right: 0.5rem;
+    color: var(--text-primary);
+}
+
+.comment-author img {
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    border: 2px solid var(--accent-blue);
+}
+
+.comment-metadata {
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.comment-metadata a {
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.comment-content {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.reply {
+    margin-top: 1rem;
+    text-align: right;
+}
+
+.comment-reply-link {
+    font-size: 0.85rem;
+    color: var(--accent-blue);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    border: 1px solid var(--accent-blue);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.comment-reply-link:hover {
+    background-color: var(--accent-blue);
+    color: #fff;
+}
+
+/* Comment Form */
+.comment-respond {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.comment-reply-title {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: block;
+    font-family: var(--font-mono);
+}
+
+.comment-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.comment-form-comment label,
+.comment-form-author label,
+.comment-form-email label,
+.comment-form-url label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.comment-form textarea,
+.comment-form input {
+    width: 100%;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.8rem;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.comment-form textarea:focus,
+.comment-form input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+.form-submit {
+    margin-top: 1rem;
+}
+
+.submit {
+    background-color: var(--accent-blue);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.submit:hover {
+    background-color: var(--accent-blue-dim);
+    transform: translateY(-2px);
 }
 
 /* Responsive */
